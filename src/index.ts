@@ -10,11 +10,11 @@ declare global {
 function createWindow() {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    height: 1080,
+    height: 800,
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
     },
-    width: 1920,
+    width: 600,
   });
 
   // and load the index.html of the app.
@@ -33,13 +33,8 @@ function createWindow() {
     nativeTheme.themeSource = 'system'
   })
 
-  /*
-  ipcMain.handle('remmote-logger:append', () => {
-    
-  });*/
-
   // Open the DevTools.
-  mainWindow.webContents.openDevTools();
+  //mainWindow.webContents.openDevTools();
 }
 
 // This method will be called when Electron has finished

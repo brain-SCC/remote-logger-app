@@ -57,7 +57,7 @@ export class SshUserConfig implements SshUserConfigInterface {
         if(existsSync(filepath)) {
             userConf = JSON.parse(readFileSync(filepath, "utf8"))
         }
-        return userConf;
+        return userConf
     }
 
     private getUserConfigFile(): string {

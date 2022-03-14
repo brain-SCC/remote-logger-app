@@ -13,11 +13,11 @@ export class Webserver {
     public registerRoutes(postCallback:any): void {
         this.fastify.get('/', (request, reply) => {
             reply.send('OK')
-        });
+        })
         this.fastify.post('/', (request, reply) => {
             reply.send('OK')
             postCallback(request.body)
-        });
+        })
     }
 
     async start() {
@@ -25,7 +25,7 @@ export class Webserver {
             this.fastify.listen(this.config.localConf.port, (err) => {
                 if (err)
                     throw err
-            });
+            })
         } catch (err) {
             this.fastify.log.error(err)
             this.exit(1)
