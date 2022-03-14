@@ -12,8 +12,8 @@ export interface SshUserConfigInterface {
 }
 
 interface ReadConfig {
-    remoteHost?: string
-    remotePort?: string | number
+    host?: string
+    port?: string | number
     username?: string
     password?: string
     privateKey?: string
@@ -40,11 +40,11 @@ export class SshUserConfig implements SshUserConfigInterface {
     private read(): void {
         const userConf:ReadConfig = this.readUserConfigFile()
 
-        if(userConf.remoteHost) {
-            this.remoteHost = userConf.remoteHost
+        if(userConf.host) {
+            this.remoteHost = userConf.host
         }
-        if(userConf.remotePort) {
-            this.remotePort = (typeof userConf.remotePort === "string")? parseInt(userConf.remotePort) : userConf.remotePort
+        if(userConf.port) {
+            this.remotePort = (typeof userConf.port !== "number")? parseInt(userConf.port) : userConf.port
         }
         if(userConf.username) {
             this.username = userConf.username
