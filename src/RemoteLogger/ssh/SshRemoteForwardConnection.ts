@@ -1,13 +1,10 @@
 import net from "net";
 import { Client } from "ssh2";
-import { SshConfig } from "./SshConfig";
+import { SshConfig } from "../config/SshConfig";
 
 export class SshRemoteForwardConnection {
-    logger;
-    constructor(private readonly client: Client, private readonly config: SshConfig) {
-        this.logger = console;
-        this.displayBanner();
-    }
+
+    constructor(private readonly client: Client) {}
 
     public static async create(conf: SshConfig): Promise<SshRemoteForwardConnection> {
         const theClient: Client = await new Promise((resolve) => {
@@ -25,7 +22,7 @@ export class SshRemoteForwardConnection {
                 .connect(conf);
 
         });
-        return new SshRemoteForwardConnection(theClient, conf);
+        return new SshRemoteForwardConnection(theClient);
     } 
 
     public async forwardIn(remoteHost: string, remotePort: number): Promise<void> {
@@ -51,19 +48,4 @@ export class SshRemoteForwardConnection {
             });
         });
     }
-
-
-    private displayBanner() {
-
-        this.logger.log(`                             
-            _____               _          __                        
-            | __  |___ _____ ___| |_ ___   |  |   ___ ___ ___ ___ ___ 
-            |    -| -_|     | . |  _| -_|  |  |__| . | . | . | -_|  _|
-            |__|__|___|_|_|_|___|_| |___|  |_____|___|_  |_  |___|_|  
-                                                     |___|___|        
-`,
-        );
-
-    this.logger.log(`open ssh remote forward connection on ${this.config.host}:${this.config.port}`);
-}
 }

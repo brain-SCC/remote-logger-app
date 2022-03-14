@@ -5,18 +5,18 @@ import os from 'os';
 
 export class SshConfig implements ConnectConfig {
 
-    password?: string | undefined;
-    privateKey?: Buffer | string | undefined;
-    passphrase?: string | undefined;
+    password?: string;
+    privateKey?: Buffer | string;
+    passphrase?: string;
 
-    constructor(public readonly host: string, public readonly port: number, public readonly username: string) {}
+    constructor(public readonly host: string, public readonly port: number, public readonly username: string) { }
 
     public setUserpassword(password?: string) {
         this.password = password;
     }
 
-    public readPrivateKey(filepath?:string, passphrase?: string) {
-        if(!filepath) {
+    public readPrivateKey(filepath?: string, passphrase?: string) {
+        if (!filepath) {
             const homedir = os.homedir();
             filepath = path.resolve(homedir, ".ssh", "id_rsa");
         }
