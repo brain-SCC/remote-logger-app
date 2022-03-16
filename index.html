@@ -14,22 +14,29 @@
     <link rel="stylesheet" href="./assets/fonts/fontawesome5-overrides.min.css">
 </head>
 
-<body id="page-top">
-    <div id="wrapper">
-        <div id="content-wrapper" class="d-flex flex-column">
+<body id="page-top" class="bg-light">
+     <div id="content-wrapper" class="d-flex flex-column">
             <div id="content">
-                <nav class="navbar navbar-light navbar-expand bg-white shadow mb-4 topbar static-top">
-                    <div class="container-fluid"><button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle me-3" type="button"><i class="fas fa-bars"></i></button>
-                        <form class="d-none d-sm-inline-block me-auto ms-md-3 my-2 my-md-0 mw-100 navbar-search">
+                <nav class="navbar navbar-light bg-light navbar-expand shadow mb-4 topbar static-top">
+                    <div class="container-fluid">
+                        
+                        <div class="hstack gap-3">
+        
+                            <a class="nav-link" href="#">
+                                <i class="fas fa-circle-info fa-fw text-dark"></i>
+                            </a>
+                            <a class="nav-link" href="#">
+                                <i class="fas fa-circle-check fa-fw text-success"></i>
+                            </a>
+                            <a class="nav-link" href="#">
+                                <i class="fas fa-exclamation fa-fw text-danger"></i>
+                            </a>
+                        </div>
+
+                        
+                        <form class="d-flex navbar-search">
                             <div class="input-group"><input class="bg-light form-control border-0 small" type="text" placeholder="Search for ..." /><button class="btn btn-primary py-0" type="button"><i class="fas fa-search"></i></button></div>
                         </form>
-
-                        <div>
-                            <p>Current theme source: <strong id="theme-source">System</strong></p>
-
-                            <button id="toggle-dark-mode">Toggle Dark Mode</button>
-                            <button id="reset-to-system">Reset to System Theme</button>
-                        </div>
                     </div>
                 </nav>
                 <div class="container-fluid">
@@ -42,8 +49,7 @@
                 </div>
             </footer>
         </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
-    </div>
-
+ 
     <!-- You can also require other files to run in this process -->
     <script src="./dist/renderer.js"></script>
     <script src="./assets/bootstrap/js/bootstrap.min.js"></script>

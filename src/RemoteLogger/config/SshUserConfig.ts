@@ -49,6 +49,9 @@ export class SshUserConfig implements SshUserConfigInterface {
         if(userConf.username) {
             this.username = userConf.username
         }
+        if(userConf.password) {
+            this.password = userConf.password
+        }
     }
 
     private readUserConfigFile(): ReadConfig {

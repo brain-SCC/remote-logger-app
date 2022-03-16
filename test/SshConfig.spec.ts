@@ -1,6 +1,6 @@
 import {describe, it} from "mocha";
 import {expect} from "chai";
-import {SshConfig} from "../src/SshConfig";
+import {SshConfig} from "../src/RemoteLogger/config/SshConfig";
 
 describe("SshConfig", () => {
     it("should can create SshConfig", () => {
