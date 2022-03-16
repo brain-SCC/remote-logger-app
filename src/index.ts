@@ -2,7 +2,7 @@ import { app, BrowserWindow, ipcMain, nativeTheme } from "electron";
 import * as path from "path";
 
 declare global {
-    interface Window {
+  interface Window {
     darkMode?: any;
   }
 }

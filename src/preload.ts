@@ -21,12 +21,15 @@ window.addEventListener("DOMContentLoaded", () => {
   };
 
   const output = document.getElementById("remote-logger-output");
-  
+
   const appConfig = new AppConfig();
   const app = new App(output, appConfig, console);
   app.run();
 
   for (const type of ["chrome", "node", "electron"]) {
-    replaceText(`${type}-version`, process.versions[type as keyof NodeJS.ProcessVersions]);
+    replaceText(
+      `${type}-version`,
+      process.versions[type as keyof NodeJS.ProcessVersions]
+    );
   }
 });
