@@ -14,7 +14,8 @@
     "watch": "tsc -w",
     "clean": "rimraf dist",
     "test": "mocha -r ts-node/register 'test/**/*.spec.ts'",
-    "format": "prettier --write package.json 'src/**/*.ts'"
+    "format": "prettier --write package.json 'src/**/*.ts'",
+    "prepare": "husky install"
   },
   "keywords": [
     "Electron",
@@ -41,6 +42,7 @@
     "electron": "^17.1.2",
     "eslint": "^8.11.0",
     "eslint-plugin-import": "^2.25.4",
+    "husky": "^7.0.4",
     "mocha": "^9.2.2",
     "prettier": "^2.6.0",
     "rimraf": "^3.0.2",
