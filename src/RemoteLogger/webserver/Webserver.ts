@@ -6,7 +6,7 @@ export class Webserver {
 
   constructor(private readonly config: AppConfig) {
     this.fastify = Fastify({
-      logger: true,
+      logger: false,
     });
   }
 
