@@ -1,5 +1,5 @@
 export class StacktracePrettyPrint {
   public static format(stacktrace: string) {
-    return stacktrace;
+    return stacktrace.replace("\n", "<br>");
   }
 }

@@ -3,15 +3,15 @@ import { StacktracePrettyPrint } from "./StacktracePrettyPrint";
 import { LogLevel, LogEntry } from "../types";
 
 const logLevelCssClassNames: Record<LogLevel, string> = {
-  debug: "border-light",
-  notice: "border-primary",
-  info: "border-info",
-  success: "border-success",
-  warning: "border-warning",
-  error: "border-danger",
-  emergency: "border-danger",
-  alert: "border-danger",
-  critical: "border-danger",
+  debug: "border-secondary text-dark",
+  notice: "border-primary text-dark",
+  info: "border-info text-dark",
+  success: "border-success text-dark",
+  warning: "border-warning text-dark",
+  error: "border-danger text-dark",
+  emergency: "border-danger bg-gradient-warning text-dark",
+  alert: "border-danger bg-gradient-danger text-white",
+  critical: "border-danger bg-gradient-dark text-white",
 };
 const logLevelCssMap = new Map<string, string>(
   Object.entries(logLevelCssClassNames)
@@ -59,8 +59,8 @@ export class ItemPrinter {
     meta += ` ${dateTime}`;
 
     return `
-        <div class="shadow-sm p-3 mb-2 rounded border-5 border-start text-dark ${classNames}">
-            <p class="text-dark">${message}</p>
+        <div class="shadow-sm p-3 mb-2 rounded border-5 border-start ${classNames}">
+            <p>${message}</p>
             ${text} ${sql} ${stacktrace}
             <small class="text-muted">${meta}</small>
         </div>
