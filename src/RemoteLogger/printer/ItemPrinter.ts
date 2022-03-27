@@ -41,7 +41,12 @@ export class ItemPrinter {
     }
 
     if (data.sql) {
-      sql = `<p>SQL:<br>${SqlPrettyPrint.format(data.sql)}</p>`;
+      if(logLevel === "alert" || logLevel === "critical") {
+        sql = `<code class="text-white">${SqlPrettyPrint.format(data.sql)}</code>`;
+      }
+      else {
+        sql = `<code>${SqlPrettyPrint.format(data.sql)}</code>`;
+      }
     }
 
     let meta = "";
