@@ -1,6 +1,6 @@
 {
   "name": "remote-logger-app",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "Electron Logger application",
   "main": "dist/index.js",
   "scripts": {
@@ -24,7 +24,10 @@
     "logging",
     "typescript"
   ],
-  "author": "GitHub",
+  "author": {
+    "name": "Enrico Lüdecke",
+    "email": "logicexception@mailbox.org"
+  },
   "license": "CC0-1.0",
   "devDependencies": {
     "@electron-forge/cli": "^6.0.0-beta.63",
