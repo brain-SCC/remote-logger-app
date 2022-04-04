@@ -4,10 +4,11 @@
     <meta charset="UTF-8" />
     <title>Remote Logger</title>
     <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'" />
-    <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self'" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; img-src https://* data:;" />
+    <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self'; img-src https://* data:;"/>
     <link rel="stylesheet" href="./assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="./assets/css/styles.css">
+    <link rel="stylesheet" href="./assets/fonts/fontawesome-all.min.css">
 </head>
 
 <body id="page-top" class="bg-light">
@@ -15,24 +16,36 @@
             <div id="content">
                 <nav class="navbar navbar-light bg-light navbar-expand shadow mb-4 topbar static-top">
                     <div class="container-fluid">
-                        
-                        <div class="hstack gap-3">
-        
-                            <a class="nav-link" href="#">
-                                <i class="fas fa-circle-info fa-fw text-dark"></i>
-                            </a>
-                            <a class="nav-link" href="#">
-                                <i class="fas fa-circle-check fa-fw text-success"></i>
-                            </a>
-                            <a class="nav-link" href="#">
-                                <i class="fas fa-exclamation fa-fw text-danger"></i>
-                            </a>
-                        </div>
+                        <div class="hstack gap-3">          
 
-                        
-                        <form class="d-flex navbar-search">
-                            <div class="input-group"><input class="bg-light form-control border-0 small" type="text" placeholder="Search for ..." /><button class="btn btn-primary py-0" type="button"><i class="fas fa-search"></i></button></div>
-                        </form>
+                            <input type="checkbox" class="btn-check" id="filterdebug" name="filter:debug" aria-label="filter to debug messages" autocomplete="off">
+                            <label class="btn btn-outline-secondary" for="filterdebug">debug</label>
+
+                            <input type="checkbox" class="btn-check" id="filternotice" name="filter:notice" aria-label="filter to notice messages" autocomplete="off">
+                            <label class="btn btn-outline-primary" for="filternotice">notice</label>
+
+                            <input type="checkbox" class="btn-check" id="filterinfo" name="filter:info" aria-label="filter to info messages" autocomplete="off">
+                            <label class="btn btn-outline-info" for="filterinfo">info</label>
+
+                            <input type="checkbox" class="btn-check" id="filtersuccess" name="filter:success" aria-label="filter to success messages" autocomplete="off">
+                            <label class="btn btn-outline-success" for="filtersuccess">info</label>
+
+                            <input type="checkbox" class="btn-check" id="filterwarning" name="filter:warning" aria-label="filter to warning" autocomplete="off">
+                            <label class="btn btn-outline-warning" for="filterwarning">warning</label>
+                            
+                            <input type="checkbox" class="btn-check" id="filtererror" name="filter:error" aria-label="filter to error messages" autocomplete="off">
+                            <label class="btn btn-outline-danger" for="filtererror">error</label>
+
+                            <input type="checkbox" class="btn-check" id="filteremergency" name="filter:emergency" aria-label="filter to emergency messages" autocomplete="off">
+                            <label class="btn btn-outline-danger" for="filteremergency">emergency</label>
+
+                            <input type="checkbox" class="btn-check" id="filteralert" name="filter:alert" aria-label="filter to alert messages" autocomplete="off">
+                            <label class="btn btn-outline-danger" for="filteralert">alert</label>
+
+                            <input type="checkbox" class="btn-check" id="filtercritical" name="filter:critical" aria-label="filter to critical messages" autocomplete="off">
+                            <label class="btn btn-outline-danger" for="filtercritical">critical</label>
+                            
+                        </div>
                     </div>
                 </nav>
                 <div class="container-fluid">
