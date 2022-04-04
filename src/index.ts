@@ -1,12 +1,6 @@
 import { app, BrowserWindow } from "electron";
 import * as path from "path";
 
-declare global {
-  interface Window {
-    darkMode?: any;
-  }
-}
-
 function createWindow() {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
