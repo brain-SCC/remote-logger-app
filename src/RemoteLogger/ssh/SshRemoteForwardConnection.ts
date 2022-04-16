@@ -1,29 +1,47 @@
+
 import net from "net";
 import { Client } from "ssh2";
 import { SshConfig } from "../config/SshConfig";
-
+import { ConsoleLogger } from './../ConsoleLogger';
 export class SshRemoteForwardConnection {
-  constructor(private readonly client: Client) {}
+  constructor(private readonly client: Client, private readonly logger: ConsoleLogger) {}
 
   public static async create(
-    conf: SshConfig
+    conf: SshConfig, logger: ConsoleLogger
   ): Promise<SshRemoteForwardConnection> {
     const theClient: Client = await new Promise((resolve) => {
       const conn = new Client();
       conn
         .on("ready", () => resolve(conn))
         .on("tcp connection", (details, accept) => {
+          logger.debug('TCP :: INCOMING CONNECTION:')
+          logger.dir(details);
           const stream = accept();
+
+          stream.on('close', () => {
+            logger.log('TCP :: CLOSED')
+          }).on('data', (data: any) => {
+            logger.log('TCP :: DATA: ' + data);
+          }).stderr.on('data', (data: any) => {
+            logger.error('STDERR: ' + data);
+          });
+
           stream.pause();
-          const socket = net.connect(details.destPort, details.destIP, () => {
-            stream.pipe(socket);
-            socket.pipe(stream);
+          const serverSocket = net.connect(details.destPort, details.destIP, () => {
+            stream.pipe(serverSocket);
+            serverSocket.pipe(stream);
             stream.resume();
           });
+          serverSocket.addListener("close", () => {
+            logger.debug("Socket closed")
+          })
+          serverSocket.addListener("ready", () => {
+            logger.debug("Socket ready")
+          })
         })
         .connect(conf);
     });
-    return new SshRemoteForwardConnection(theClient);
+    return new SshRemoteForwardConnection(theClient, logger);
   }
 
   public async forwardIn(
@@ -33,6 +51,7 @@ export class SshRemoteForwardConnection {
     await new Promise<void>((resolve, reject) => {
       this.client.forwardIn(remoteHost, remotePort, (error) => {
         if (error) {
+          this.logger.error(error);
           reject(error);
           return;
         }
@@ -48,6 +67,7 @@ export class SshRemoteForwardConnection {
     await new Promise<void>((resolve, reject) => {
       this.client.unforwardIn(remoteHost, remotePort, (error) => {
         if (error) {
+          this.logger.error(error);
           reject(error);
           return;
         }

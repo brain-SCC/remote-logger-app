@@ -1,34 +1,40 @@
 import { WebserverConfig } from "./WebserverConfig";
 import { SshConfig } from "./SshConfig";
-import { SshUserConfig } from "./SshUserConfig";
+import { UserConfig } from "./SshUserConfig";
 
 export class AppConfig {
-  private _localConf: WebserverConfig;
-  private _sshConf: SshConfig;
-
+  private _localConf: WebserverConfig
+  private _sshConf: SshConfig
+  private _isDebugEnabled: boolean
+  
   constructor() {
-    this._localConf = new WebserverConfig();
-    const sshUserConf = new SshUserConfig();
+    this._localConf = new WebserverConfig()
+    const userConf = new UserConfig()
     this._sshConf = new SshConfig(
-      sshUserConf.remoteHost,
-      sshUserConf.remotePort,
-      sshUserConf.username
-    );
-    if (sshUserConf.password) {
-      this._sshConf.setUserpassword(sshUserConf.password);
+      userConf.remoteHost,
+      userConf.remotePort,
+      userConf.username
+    )
+    if (userConf.password) {
+      this._sshConf.setUserpassword(userConf.password)
     } else {
       this._sshConf.readPrivateKey(
-        sshUserConf.privateKey,
-        sshUserConf.passphrase
-      );
+        userConf.privateKey,
+        userConf.passphrase
+      )
     }
+    this._isDebugEnabled = userConf.isDebugEnabled
   }
 
-  get localConf() {
-    return this._localConf;
+  get localConf(): WebserverConfig {
+    return this._localConf
   }
 
-  get sshConf() {
-    return this._sshConf;
+  get sshConf(): SshConfig {
+    return this._sshConf
+  }
+
+  get isDebugEnabled(): boolean {
+    return this._isDebugEnabled
   }
 }

@@ -2,71 +2,78 @@ import { readFileSync, existsSync } from "fs";
 import os from "os";
 import path from "path";
 
-export interface SshUserConfigInterface {
-  remoteHost: string;
-  remotePort: number;
-  username: string;
-  password?: string;
-  privateKey?: string;
-  passphrase?: string;
+export interface UserConfigInterface {
+  remoteHost: string
+  remotePort: number
+  username: string
+  password?: string
+  privateKey?: string
+  passphrase?: string
+  isDebugEnabled: boolean
 }
 
 interface ReadConfig {
-  host?: string;
-  port?: string | number;
-  username?: string;
-  password?: string;
-  privateKey?: string;
-  passphrase?: string;
+  host?: string
+  port?: string | number
+  username?: string
+  password?: string
+  privateKey?: string
+  passphrase?: string
+  debug?: boolean
 }
 
-export class SshUserConfig implements SshUserConfigInterface {
-  private static USER_CONF = "remote-logger.json";
-  remoteHost: string;
-  remotePort: number;
-  username: string;
-  password?: string;
-  privateKey?: string;
-  passphrase?: string;
+export class UserConfig implements UserConfigInterface {
+  private static USER_CONF = "remote-logger.json"
+  remoteHost: string
+  remotePort: number
+  username: string
+  password?: string
+  privateKey?: string
+  passphrase?: string
+  isDebugEnabled: boolean
 
   constructor() {
-    this.remoteHost = "127.0.0.1";
-    this.remotePort = 22;
-    this.username = os.userInfo().username;
-    this.privateKey = path.resolve(os.homedir(), ".ssh", "id_rsa");
-    this.read();
+    this.remoteHost = "127.0.0.1"
+    this.remotePort = 22
+    this.username = os.userInfo().username
+    this.privateKey = path.resolve(os.homedir(), ".ssh", "id_rsa")
+    this.isDebugEnabled = false
+    this.read()
   }
 
   private read(): void {
-    const userConf: ReadConfig = this.readUserConfigFile();
+    const userConfFileValues: ReadConfig = this.readUserConfigFile()
 
-    if (userConf.host) {
-      this.remoteHost = userConf.host;
+    if (userConfFileValues.host) {
+      this.remoteHost = userConfFileValues.host
     }
-    if (userConf.port) {
+    if (userConfFileValues.port) {
       this.remotePort =
-        typeof userConf.port !== "number"
-          ? parseInt(userConf.port)
-          : userConf.port;
+        typeof userConfFileValues.port !== "number"
+          ? parseInt(userConfFileValues.port)
+          : userConfFileValues.port
     }
-    if (userConf.username) {
-      this.username = userConf.username;
+    if (userConfFileValues.username) {
+      this.username = userConfFileValues.username
     }
-    if (userConf.password) {
-      this.password = userConf.password;
+    if (userConfFileValues.password) {
+      this.password = userConfFileValues.password
+    }
+    if (userConfFileValues.debug) {
+      this.isDebugEnabled = userConfFileValues.debug
     }
   }
 
   private readUserConfigFile(): ReadConfig {
-    let userConf: ReadConfig = {};
-    const filepath = this.getUserConfigFile();
+    let userConf: ReadConfig = {}
+    const filepath = this.getUserConfigFile()
     if (existsSync(filepath)) {
-      userConf = JSON.parse(readFileSync(filepath, "utf8"));
+      userConf = JSON.parse(readFileSync(filepath, "utf8"))
     }
     return userConf;
   }
 
   private getUserConfigFile(): string {
-    return path.resolve(os.homedir(), SshUserConfig.USER_CONF);
+    return path.resolve(os.homedir(), UserConfig.USER_CONF)
   }
 }

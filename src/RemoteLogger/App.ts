@@ -1,16 +1,17 @@
+import { ConsoleLogger } from './ConsoleLogger';
 import { AppConfig } from "./config/AppConfig";
 import { ItemPrinter } from "./printer/ItemPrinter";
 import { SshRemoteForwardConnection } from "./ssh/SshRemoteForwardConnection";
 import { Webserver } from "./webserver/Webserver";
 
 export class App {
-  private static MAX_LOG_ENTIES = 1000;
+  private static MAX_LOG_ENTIES = 100;
   private itemPrinter: ItemPrinter;
 
   constructor(
     private readonly output: HTMLElement,
     private readonly appConf: AppConfig,
-    private readonly logger?: any
+    private readonly logger: ConsoleLogger
   ) {
     this.itemPrinter = new ItemPrinter();
   }
@@ -23,8 +24,8 @@ export class App {
 
   private startWebserver(): void {
     const fnClean = async (output: HTMLElement) => {
-      while (output.childNodes.length > App.MAX_LOG_ENTIES) {
-        output.removeChild(output.lastChild);
+      while (output.childNodes.length > App.MAX_LOG_ENTIES && output.lastChild) {
+          output.removeChild(output.lastChild);
       }
     };
     const fnPostHandler = (data: any) => {
@@ -44,7 +45,7 @@ export class App {
     /* opens ssh remote forward connection to remote host */
     const openSshRemoteForwardConnection = async () => {
       const con: SshRemoteForwardConnection =
-        await SshRemoteForwardConnection.create(this.appConf.sshConf);
+        await SshRemoteForwardConnection.create(this.appConf.sshConf, this.logger);
       /* forward to local 127.0.0.1:290980 */
       con.forwardIn(this.appConf.localConf.host, this.appConf.localConf.port);
     };
@@ -52,7 +53,7 @@ export class App {
   }
 
   private showBanner(): void {
-    this.logger?.log(`                             
+    this.logger.log(`                             
   _____               _          __                        
   | __  |___ _____ ___| |_ ___   |  |   ___ ___ ___ ___ ___ 
   |    -| -_|     | . |  _| -_|  |  |__| . | . | . | -_|  _|
