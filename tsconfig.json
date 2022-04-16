@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "strict": true,
     "allowJs": true,
     "module": "commonjs",
     "noImplicitAny": true,
@@ -9,6 +10,7 @@
     "outDir": "dist",
     "moduleResolution": "node",
     "resolveJsonModule": true,
+    "forceConsistentCasingInFileNames": true,
     "baseUrl": ".",
     "paths": {
       "*": [
