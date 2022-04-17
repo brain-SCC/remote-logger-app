@@ -1,20 +1,17 @@
+
 import { ConsoleLogger } from './ConsoleLogger';
+import { Renderer } from './Renderer';
 import { AppConfig } from "./config/AppConfig";
-import { ItemPrinter } from "./printer/ItemPrinter";
+
 import { SshRemoteForwardConnection } from "./ssh/SshRemoteForwardConnection";
 import { Webserver } from "./webserver/Webserver";
 
 export class App {
-  private static MAX_LOG_ENTIES = 100;
-  private itemPrinter: ItemPrinter;
-
   constructor(
-    private readonly output: HTMLElement,
     private readonly appConf: AppConfig,
+    private readonly renderer: Renderer,
     private readonly logger: ConsoleLogger
-  ) {
-    this.itemPrinter = new ItemPrinter();
-  }
+  ) {}
 
   public run() {
     this.startWebserver();
@@ -23,16 +20,10 @@ export class App {
   }
 
   private startWebserver(): void {
-    const fnClean = async (output: HTMLElement) => {
-      while (output.childNodes.length > App.MAX_LOG_ENTIES && output.lastChild) {
-          output.removeChild(output.lastChild);
-      }
-    };
+
     const fnPostHandler = (data: any) => {
-      const item: HTMLDivElement = document.createElement("div");
-      item.innerHTML = this.itemPrinter.toHtml(data);
-      this.output.prepend(item);
-      fnClean(this.output);
+      this.renderer.renderItem(data);
+      this.renderer.cleanOverflow();
     };
 
     /* starts local webserver on 127.0.0.1:290980 */

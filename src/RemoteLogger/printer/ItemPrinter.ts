@@ -18,12 +18,10 @@ const logLevelCssMap = new Map<string, string>(
 );
 
 export class ItemPrinter {
-  public toHtml(data: LogEntry) {
+  public create(data: LogEntry, hidden: boolean): HTMLDivElement {
+    const div: HTMLDivElement = document.createElement("div");
     const logLevel = data.level ?? "debug";
     const message = data.message ?? "no message sent";
-
-    const classNames =
-      logLevelCssMap.get(logLevel) ?? logLevelCssMap.get("debug");
     const dateTime = new Date().toLocaleString();
 
     let text = "";
@@ -63,12 +61,30 @@ export class ItemPrinter {
 
     meta += ` ${dateTime}`;
 
-    return `
-        <div class="shadow-sm p-3 mb-2 rounded border-5 border-start ${classNames}">
-            <p>${message}</p>
-            ${text} ${sql} ${stacktrace}
-            <small class="text-muted">${meta}</small>
-        </div>
-        `;
+    div.classList.add(
+      "shadow-sm", 
+      "p-3", 
+      "mb-2", 
+      "rounded", 
+      "border-5", 
+      "border-start", 
+      "log-entry",
+      `ll-${logLevel}`
+    )
+
+    if(hidden) {
+      div.classList.add("d-none")
+    }
+
+    const classNames = logLevelCssMap.get(logLevel) ?? logLevelCssMap.get("debug");
+    classNames?.split(" ").forEach(css => div.classList.add(css));
+
+    div.innerHTML = `
+        <p>${message}</p>
+        ${text} ${sql} ${stacktrace}
+        <small class="text-muted">${meta}</small>
+    `;
+
+    return div;
   }
 }

@@ -19,4 +19,6 @@ export type LogEntry = {
   method?: string;
   line?: number;
   context?: any;
-};
+}
+
+export type LogLevelCheckbox = [LogLevel, HTMLInputElement];
