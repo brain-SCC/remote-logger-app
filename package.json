@@ -1,7 +1,8 @@
 {
   "name": "remote-logger-app",
   "version": "0.0.2",
-  "description": "Electron Logger application",
+  "productName": "RemoteLogger",
+  "description": "RemoteLogger application",
   "main": "dist/index.js",
   "scripts": {
     "clean": "rimraf dist",
@@ -11,6 +12,11 @@
     "start": "tsc && electron-forge start",
     "package": "electron-forge package",
     "make": "npm run build && electron-forge make",
+    "make-all": "npm run build && electron-forge make --all",
+    "make-mac-x64": "npm run build && electron-forge make --platform darwin --arch x64",
+    "make-mac-arm": "npm run build && electron-forge make --platform darwin --arch arm64",
+    "make-mac-uni": "npm run build && npm run build && electron-forge make --platform darwin --arch arm64 && electron-forge make --platform darwin --arch x64 && node ./build-scripts/mac-universal.mjs",
+    "make-linux": "npm run build && electron-forge make --platform linux --targets deb",
     "publish": "electron-forge publish",
     "lint": "eslint --ext .ts .",
     "watch": "tsc -w",
@@ -42,6 +48,8 @@
     "@types/node": "^17.0.24",
     "@typescript-eslint/eslint-plugin": "^5.19.0",
     "@typescript-eslint/parser": "^5.19.0",
+    "@electron/universal": "^1.2.1",
+    "@electron-forge/maker-dmg": "^6.0.0-beta.63",
     "chai": "^4.3.6",
     "electron": "^18.0.4",
     "eslint": "^8.13.0",
@@ -51,30 +59,53 @@
     "prettier": "^2.6.2",
     "rimraf": "^3.0.2",
     "ts-node": "^10.7.0",
-    "typescript": "~4.6.3"
+    "typescript": "~4.6.3",
+    "electron-squirrel-startup": "^1.0.0"
   },
   "dependencies": {
     "@types/ssh2": "^0.5.52",
-    "electron-squirrel-startup": "^1.0.0",
     "fastify": "^3.28.0",
     "sql-formatter": "^4.0.2",
     "ssh2": "^1.9.0"
   },
   "config": {
     "forge": {
-      "packagerConfig": {},
+      "buildIdentifier": "remote-logger",
+      "packagerConfig": {
+      },
+      "make_targets": {
+        "win32": [
+          "squirrel"
+        ],
+        "darwin": [
+          "dmg"
+        ],
+        "linux": [
+          "deb",
+          "rpm"
+        ]
+      },
       "makers": [
         {
           "name": "@electron-forge/maker-squirrel",
           "config": {
-            "name": "my_app_ts"
+            "name": "RemoteLogger"
           }
         },
         {
           "name": "@electron-forge/maker-zip",
           "platforms": [
-            "darwin"
+            "win32"
           ]
+        },
+        {
+          "name": "@electron-forge/maker-dmg",
+          "platforms": [
+            "darwin"
+          ],
+          "config": {
+            "format": "ULFO"
+          }
         },
         {
           "name": "@electron-forge/maker-deb",
