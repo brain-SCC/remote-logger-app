@@ -12,11 +12,10 @@
     "start": "tsc && electron-forge start",
     "package": "electron-forge package",
     "make": "npm run build && electron-forge make",
-    "make-all": "npm run build && electron-forge make --all",
     "make-mac-x64": "npm run build && electron-forge make --platform darwin --arch x64",
     "make-mac-arm": "npm run build && electron-forge make --platform darwin --arch arm64",
-    "make-mac-uni": "npm run build && npm run build && electron-forge make --platform darwin --arch arm64 && electron-forge make --platform darwin --arch x64 && node ./build-scripts/mac-universal.mjs",
-    "make-linux": "npm run build && electron-forge make --platform linux --targets deb",
+    "make-mac": "npm run build && electron-forge make --platform darwin --arch arm64 && electron-forge make --platform darwin --arch x64",
+    "make-mac-uni": "npm run make-mac && node ./build-scripts/mac-universal.mjs",
     "publish": "electron-forge publish",
     "lint": "eslint --ext .ts .",
     "watch": "tsc -w",
@@ -38,18 +37,16 @@
   "license": "CC0-1.0",
   "devDependencies": {
     "@electron-forge/cli": "^6.0.0-beta.63",
-    "@electron-forge/maker-deb": "^6.0.0-beta.63",
-    "@electron-forge/maker-rpm": "^6.0.0-beta.63",
     "@electron-forge/maker-squirrel": "^6.0.0-beta.63",
     "@electron-forge/maker-zip": "^6.0.0-beta.63",
+    "@electron-forge/maker-dmg": "^6.0.0-beta.63",
     "@types/chai": "^4.3.1",
     "@types/eslint": "^8.4.1",
     "@types/mocha": "^9.1.0",
-    "@types/node": "^17.0.24",
-    "@typescript-eslint/eslint-plugin": "^5.19.0",
+    "@types/node": "^17.0.25",
+    "@typescript-eslint/eslint-plugin": "^5.20.0",
     "@typescript-eslint/parser": "^5.19.0",
     "@electron/universal": "^1.2.1",
-    "@electron-forge/maker-dmg": "^6.0.0-beta.63",
     "chai": "^4.3.6",
     "electron": "^18.0.4",
     "eslint": "^8.13.0",
@@ -106,14 +103,6 @@
           "config": {
             "format": "ULFO"
           }
-        },
-        {
-          "name": "@electron-forge/maker-deb",
-          "config": {}
-        },
-        {
-          "name": "@electron-forge/maker-rpm",
-          "config": {}
         }
       ]
     }
