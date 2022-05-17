@@ -7,12 +7,24 @@ export class SshRemoteForwardConnection {
   constructor(private readonly client: Client, private readonly logger: ConsoleLogger) {}
 
   public static async create(
-    conf: SshConfig, logger: ConsoleLogger
+    conf: SshConfig, logger: ConsoleLogger, fnOnSshConnectionChange: any
   ): Promise<SshRemoteForwardConnection> {
     const theClient: Client = await new Promise((resolve) => {
       const conn = new Client();
       conn
-        .on("ready", () => resolve(conn))
+        .on("ready", () => {
+          fnOnSshConnectionChange('ready')
+          resolve(conn)
+        })
+        .on("continue", () => {
+          fnOnSshConnectionChange('continue')
+        })
+        .on("close", () => {
+          fnOnSshConnectionChange('close')
+        })
+        .on("error", () => {
+          fnOnSshConnectionChange('error')
+        })
         .on("tcp connection", (details, accept) => {
           logger.debug('TCP :: INCOMING CONNECTION:')
           logger.dir(details);

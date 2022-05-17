@@ -1,6 +1,6 @@
 {
   "name": "remote-logger-app",
-  "version": "0.0.2",
+  "version": "0.0.4",
   "productName": "RemoteLogger",
   "description": "RemoteLogger application",
   "main": "dist/index.js",

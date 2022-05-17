@@ -29,13 +29,42 @@ window.addEventListener("DOMContentLoaded", () => {
 
     const renderer = new Renderer(output, listener, MAX_LOG_ENTIES, logger)
     const app = new App(appConfig, renderer, logger);
-    app.run();
+
+    const fnOnSshConnectionChange = (status: string) => {
+      const infoBtn = document.querySelector('#show-ssh-info');
+      if(infoBtn instanceof HTMLElement) {
+          infoBtn.classList.remove("text-white", "text-danger", "text-warning", "text-success", "text-secondary");
+          switch(status) {
+            case "ready":
+              infoBtn.classList.add("text-success");
+              infoBtn.title = "connected with: " + appConfig.sshConf.host;
+              break;
+            case "continue":
+              infoBtn.classList.add("text-warning");
+              infoBtn.title = "continue connection with: " + appConfig.sshConf.host;
+              break;
+            case "close":
+              infoBtn.classList.add("text-secondary");
+              infoBtn.title = "connection closed";
+              break;
+            case "error":
+              infoBtn.classList.add("text-danger");
+              infoBtn.title = "error no connection to: " + appConfig.sshConf.host;    
+              break;
+            default:
+              infoBtn.classList.add("text-white");
+              infoBtn.title = "";    
+          }
+      }
+    };
+
+    app.run(fnOnSshConnectionChange);
 
     const clearBtn = document.querySelector('#clear-output');
     if(clearBtn) {
       clearBtn.addEventListener('click', () => {
         renderer.cleanAll()
       })
-    } 
+    }
   }
 });

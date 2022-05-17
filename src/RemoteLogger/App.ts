@@ -13,9 +13,9 @@ export class App {
     private readonly logger: ConsoleLogger
   ) {}
 
-  public run() {
+  public run(fnOnSshConnectionChange: any) {
     this.startWebserver();
-    this.openSshConnection();
+    this.openSshConnection(fnOnSshConnectionChange);
     this.showBanner();
   }
 
@@ -32,11 +32,11 @@ export class App {
     webServer.start();
   }
 
-  private openSshConnection(): void {
+  private openSshConnection(fnOnSshConnectionChange: any): void {
     /* opens ssh remote forward connection to remote host */
     const openSshRemoteForwardConnection = async () => {
       const con: SshRemoteForwardConnection =
-        await SshRemoteForwardConnection.create(this.appConf.sshConf, this.logger);
+        await SshRemoteForwardConnection.create(this.appConf.sshConf, this.logger, fnOnSshConnectionChange);
       /* forward to local 127.0.0.1:290980 */
       con.forwardIn(this.appConf.localConf.host, this.appConf.localConf.port);
     };
