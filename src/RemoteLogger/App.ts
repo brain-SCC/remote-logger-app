@@ -19,49 +19,16 @@ export class App {
     this.fnOnSshConnectionChange = fnOnSshConnectionChange;
   }
 
-  public start() {
+  public run() {
     this.startWebserver();
-    this.openSshConnection(this.fnOnSshConnectionChange);
-    this.showBanner();
+    this.start();
   }
 
-  public async stop(): Promise<void> {
-    if(this.webServer) {
-      this.logger.debug("Webserver defined, stopping")
-      this.webServer.stop().then(() => {
-        this.webServer = undefined
-        this.logger.debug("Webserver now stopped")
-      })
+  public reconnect(): void  {
+    if(this.isConnected()) {
+      this.stop()
     }
-    else {
-      this.logger.debug("no Webserver defined")
-    }
-
-    if(this.sshCon) {
-      this.logger.debug("SSH connection open, closing")
-      this.sshCon
-        .unforwardIn(this.appConf.localConf.host, this.appConf.localConf.port)
-        .then(() => {
-          this.sshCon?.disconnect()
-          this.sshCon = undefined;
-          this.logger.debug("SSH connection closed")
-        });
-    }
-    else {
-      this.logger.debug("no SSH connection open")
-    }
-    this.fnOnSshConnectionChange('close')
-  }
-
-  public async reconnect(): Promise<void>  {
-    if(this.sshCon || this.webServer) {
-      await this.stop().then(() => {
-        this.start()
-      })
-    }
-    else {
-      this.start()
-    }
+    this.start()
   }
 
   private startWebserver(): void {
@@ -71,19 +38,35 @@ export class App {
     };
 
     /* starts local webserver on 127.0.0.1:290980 */
-    this.webServer = new Webserver(this.appConf);
-    this.webServer.registerRoutes(fnPostHandler);
-    this.webServer.start();
+    this.webServer = new Webserver(this.appConf)
+    this.webServer.registerRoutes(fnPostHandler)
+    this.webServer.start()
   }
 
-  private openSshConnection(fnOnSshConnectionChange: any): void {
+  private openSshConnection(): void {
     /* opens ssh remote forward connection to remote host */
     const openSshRemoteForwardConnection = async () => {
-      this.sshCon = await SshRemoteForwardConnection.create(this.appConf.sshConf, this.logger, fnOnSshConnectionChange);
+      this.sshCon = await SshRemoteForwardConnection.create(this.appConf.sshConf, this.logger, this.fnOnSshConnectionChange);
       /* forward to local 127.0.0.1:290980 */
       this.sshCon.forwardIn(this.appConf.localConf.host, this.appConf.localConf.port);
     };
     openSshRemoteForwardConnection();
+  }
+
+  private isConnected(): boolean {
+    if(this.sshCon?.isConnectionOpen()) {
+      return true;
+    }
+    return false;
+  }
+
+  private start() {
+    this.openSshConnection();
+    this.showBanner();
+  }
+
+  private stop(): void {
+    this.sshCon?.disconnect();
   }
 
   private showBanner(): void {
