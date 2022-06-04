@@ -31,6 +31,16 @@ export class Webserver {
     }
   }
 
+  async stop() {
+    try {
+      await this.fastify.close();
+      this.fastify.server.unref();
+    } catch (err) {
+      this.fastify.log.error(err);
+      this.exit(1);
+    }
+  }
+
   public exit(errCode = 0) {
     process.exit(errCode);
   }
