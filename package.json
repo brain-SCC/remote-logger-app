@@ -1,6 +1,6 @@
 {
   "name": "remote-logger-app",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "productName": "RemoteLogger",
   "description": "RemoteLogger application",
   "main": "dist/index.js",
@@ -68,8 +68,7 @@
   "config": {
     "forge": {
       "buildIdentifier": "remote-logger",
-      "packagerConfig": {
-      },
+      "packagerConfig": {},
       "make_targets": {
         "win32": [
           "squirrel"
