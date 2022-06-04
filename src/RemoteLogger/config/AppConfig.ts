@@ -17,6 +17,8 @@ export class AppConfig {
     )
     if (userConf.password) {
       this._sshConf.setUserpassword(userConf.password)
+    } else if(userConf.agent) {
+      this._sshConf.agent = this._sshConf.getAgent();
     } else {
       this._sshConf.readPrivateKey(
         userConf.privateKey,

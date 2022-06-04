@@ -72,6 +72,11 @@ export class SshRemoteForwardConnection {
     });
   }
 
+  public async disconnect(): Promise<void> {
+    this.client.end();
+    this.client.destroy();
+  }
+
   public async unforwardIn(
     remoteHost: string,
     remotePort: number

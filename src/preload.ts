@@ -27,9 +27,6 @@ window.addEventListener("DOMContentLoaded", () => {
       ["critical", document.querySelector('#filtercritical') as HTMLInputElement],
     ]);
 
-    const renderer = new Renderer(output, listener, MAX_LOG_ENTIES, logger)
-    const app = new App(appConfig, renderer, logger);
-
     const fnOnSshConnectionChange = (status: string) => {
       const infoBtn = document.querySelector('#show-ssh-info');
       if(infoBtn instanceof HTMLElement) {
@@ -58,7 +55,10 @@ window.addEventListener("DOMContentLoaded", () => {
       }
     };
 
-    app.run(fnOnSshConnectionChange);
+    const renderer = new Renderer(output, listener, MAX_LOG_ENTIES, logger)
+    const app = new App(appConfig, renderer, logger, fnOnSshConnectionChange);
+
+    app.start();
 
     const clearBtn = document.querySelector('#clear-output');
     if(clearBtn) {
@@ -66,5 +66,21 @@ window.addEventListener("DOMContentLoaded", () => {
         renderer.cleanAll()
       })
     }
+
+    const infoBtn = document.querySelector('#show-ssh-info');
+    if(infoBtn) {
+      infoBtn.addEventListener('click', () => {
+        if(confirm("really reconnect?")) {
+          app.reconnect()
+        }
+      })
+    }
+      
+    window.addEventListener('online', () => {
+      app.start();
+    });
+    window.addEventListener('offline', () => {
+      app.stop();
+    });
   }
 });

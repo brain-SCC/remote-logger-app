@@ -9,6 +9,7 @@ export interface UserConfigInterface {
   password?: string
   privateKey?: string
   passphrase?: string
+  agent?: boolean
   isDebugEnabled: boolean
 }
 
@@ -19,6 +20,7 @@ interface ReadConfig {
   password?: string
   privateKey?: string
   passphrase?: string
+  agent?:boolean
   debug?: boolean
 }
 
@@ -30,6 +32,7 @@ export class UserConfig implements UserConfigInterface {
   password?: string
   privateKey?: string
   passphrase?: string
+  agent?:boolean
   isDebugEnabled: boolean
 
   constructor() {
@@ -58,6 +61,15 @@ export class UserConfig implements UserConfigInterface {
     }
     if (userConfFileValues.password) {
       this.password = userConfFileValues.password
+    }
+    if (userConfFileValues.privateKey) {
+      this.privateKey = userConfFileValues.privateKey
+    }
+    if (userConfFileValues.passphrase) {
+      this.passphrase = userConfFileValues.passphrase
+    }
+    if (userConfFileValues.agent) {
+      this.agent = userConfFileValues.agent
     }
     if (userConfFileValues.debug) {
       this.isDebugEnabled = userConfFileValues.debug
