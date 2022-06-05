@@ -11,7 +11,6 @@ window.addEventListener("DOMContentLoaded", () => {
   const output = document.getElementById("remote-logger-output");
   if(output) 
   {
-    const MAX_LOG_ENTIES = 100;
     const appConfig = new AppConfig();
     const logger = new ConsoleLoggerImpl(appConfig.isDebugEnabled? console : undefined);
 
@@ -56,7 +55,7 @@ window.addEventListener("DOMContentLoaded", () => {
       }
     };
 
-    const renderer = new Renderer(output, listener, MAX_LOG_ENTIES, logger)
+    const renderer = new Renderer(output, listener, appConfig.maxLogEntries, logger)
     const app = new App(appConfig, renderer, logger, fnOnSshConnectionChange);
     app.run();
 
@@ -76,7 +75,7 @@ window.addEventListener("DOMContentLoaded", () => {
     }
       
     window.addEventListener('online', () => {
-     logger.debug("trigger event listener ONLINE")
+      logger.debug("trigger event listener ONLINE")
       app.reconnect()
     });
     window.addEventListener('offline', () => {
