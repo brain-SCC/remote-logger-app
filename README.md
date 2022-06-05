@@ -87,6 +87,12 @@ You can define, how many log entries are displayed. If you don't set this value,
 
 If you want to log the logger, you can enable debug mode with "debug": true. Be arware, windows will show strange behaviour if you enable logging.
 
+```json
+{
+  "debug": true,
+}
+```
+
 ## Example Requests
 
 ```bash
