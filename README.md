@@ -22,7 +22,7 @@ If you connect to an server which is already in your `~/.ssh/config` you can sim
 
 ## Using ssh-agent
 
-If you have to deal with multiple SSH connections you should use an key piar for every host you connect to. It is also a good idea to protect your keys with an passphrase. You should consider use a ssh-agent. To enable ssh-agent usage, activate it with agent = true parameter.
+If you have to deal with multiple SSH connections you should use an key pair for every host you connect to. It is also a good idea to protect your keys with an passphrase. You should consider use a ssh-agent. To enable ssh-agent usage, activate it with agent = true parameter.
 
 ```json
 {
