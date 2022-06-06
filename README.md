@@ -85,7 +85,7 @@ You can define, how many log entries are displayed. If you don't set this value,
 
 ## Debug (development only)
 
-If you want to log the logger, you can enable debug mode with "debug": true. Be arware, windows will show strange behaviour if you enable logging.
+If you want to log the logger, you can enable debug mode with "debug": true. Be aware, windows will show strange behaviour if you enable logging.
 
 ```json
 {
