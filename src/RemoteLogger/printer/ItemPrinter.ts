@@ -25,6 +25,7 @@ export class ItemPrinter {
     const dateTime = new Date().toLocaleString();
 
     let text = "";
+    let context = "";
     let stacktrace = "";
     let sql = "";
 
@@ -45,6 +46,12 @@ export class ItemPrinter {
       else {
         sql = `<code>${SqlPrettyPrint.format(data.sql)}</code>`;
       }
+    }
+
+    if (data.context) {
+      context = `<p>Stacktrace:<br>${StacktracePrettyPrint.format(
+        data.context
+      )}</p>`;
     }
 
     let meta = "";
@@ -81,7 +88,7 @@ export class ItemPrinter {
 
     div.innerHTML = `
         <p>${message}</p>
-        ${text} ${sql} ${stacktrace}
+        ${text} ${sql} ${context} ${stacktrace}
         <small class="text-muted">${meta}</small>
     `;
 
