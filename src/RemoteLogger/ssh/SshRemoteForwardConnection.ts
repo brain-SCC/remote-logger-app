@@ -4,10 +4,17 @@ import { Client } from "ssh2";
 import { SshConfig } from "../config/SshConfig";
 import { ConsoleLogger } from './../ConsoleLogger';
 export class SshRemoteForwardConnection {
-  constructor(private readonly client: Client, private readonly logger: ConsoleLogger) {}
+  
+  private isSshSocketOpen:boolean;
+
+  constructor(private readonly client: Client, private readonly conf: SshConfig, private readonly logger: ConsoleLogger) {
+    this.isSshSocketOpen = true;
+  }
 
   public static async create(
-    conf: SshConfig, logger: ConsoleLogger, fnOnSshConnectionChange: any
+    conf: SshConfig, 
+    logger: ConsoleLogger, 
+    fnOnSshConnectionChange: any
   ): Promise<SshRemoteForwardConnection> {
     const theClient: Client = await new Promise((resolve) => {
       const conn = new Client();
@@ -50,10 +57,9 @@ export class SshRemoteForwardConnection {
           serverSocket.addListener("ready", () => {
             logger.debug("Socket ready")
           })
-        })
-        .connect(conf);
+        }).connect(conf)
     });
-    return new SshRemoteForwardConnection(theClient, logger);
+    return new SshRemoteForwardConnection(theClient, conf, logger);
   }
 
   public async forwardIn(
@@ -72,19 +78,18 @@ export class SshRemoteForwardConnection {
     });
   }
 
-  public async unforwardIn(
-    remoteHost: string,
-    remotePort: number
-  ): Promise<void> {
-    await new Promise<void>((resolve, reject) => {
-      this.client.unforwardIn(remoteHost, remotePort, (error) => {
-        if (error) {
-          this.logger.error(error);
-          reject(error);
-          return;
-        }
-        resolve();
-      });
-    });
+  public isConnectionOpen(): boolean {
+    return this.isSshSocketOpen;
+  }
+
+  public reconnect(): void {
+    this.client.connect(this.conf)
+    this.isSshSocketOpen = true
+  }
+
+  public disconnect(): void {
+    this.client.end();
+    this.client.destroy();
+    this.isSshSocketOpen = false;
   }
 }

@@ -2,45 +2,71 @@
 import { ConsoleLogger } from './ConsoleLogger';
 import { Renderer } from './Renderer';
 import { AppConfig } from "./config/AppConfig";
-
 import { SshRemoteForwardConnection } from "./ssh/SshRemoteForwardConnection";
 import { Webserver } from "./webserver/Webserver";
 
 export class App {
+  private webServer?: Webserver
+  private sshCon?: SshRemoteForwardConnection
+  private fnOnSshConnectionChange?: any
+  
   constructor(
     private readonly appConf: AppConfig,
     private readonly renderer: Renderer,
-    private readonly logger: ConsoleLogger
-  ) {}
+    private readonly logger: ConsoleLogger,
+    fnOnSshConnectionChange: any
+  ) {
+    this.fnOnSshConnectionChange = fnOnSshConnectionChange;
+  }
 
-  public run(fnOnSshConnectionChange: any) {
+  public run() {
     this.startWebserver();
-    this.openSshConnection(fnOnSshConnectionChange);
-    this.showBanner();
+    this.start();
+  }
+
+  public reconnect(): void  {
+    if(this.isConnected()) {
+      this.stop()
+    }
+    this.start()
   }
 
   private startWebserver(): void {
-
     const fnPostHandler = (data: any) => {
       this.renderer.renderItem(data);
       this.renderer.cleanOverflow();
     };
 
     /* starts local webserver on 127.0.0.1:290980 */
-    const webServer: Webserver = new Webserver(this.appConf);
-    webServer.registerRoutes(fnPostHandler);
-    webServer.start();
+    this.webServer = new Webserver(this.appConf)
+    this.webServer.registerRoutes(fnPostHandler)
+    this.webServer.start()
   }
 
-  private openSshConnection(fnOnSshConnectionChange: any): void {
+  private openSshConnection(): void {
     /* opens ssh remote forward connection to remote host */
     const openSshRemoteForwardConnection = async () => {
-      const con: SshRemoteForwardConnection =
-        await SshRemoteForwardConnection.create(this.appConf.sshConf, this.logger, fnOnSshConnectionChange);
+      this.sshCon = await SshRemoteForwardConnection.create(this.appConf.sshConf, this.logger, this.fnOnSshConnectionChange);
       /* forward to local 127.0.0.1:290980 */
-      con.forwardIn(this.appConf.localConf.host, this.appConf.localConf.port);
+      this.sshCon.forwardIn(this.appConf.localConf.host, this.appConf.localConf.port);
     };
     openSshRemoteForwardConnection();
+  }
+
+  private isConnected(): boolean {
+    if(this.sshCon?.isConnectionOpen()) {
+      return true;
+    }
+    return false;
+  }
+
+  private start() {
+    this.openSshConnection();
+    this.showBanner();
+  }
+
+  private stop(): void {
+    this.sshCon?.disconnect();
   }
 
   private showBanner(): void {

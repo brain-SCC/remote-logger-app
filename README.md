@@ -8,9 +8,9 @@ touch ~/remote-logger.json
 
 Edit this file by your prefered editor (vim, nano, vscode, sublime etc).
 
-## using .id_rsa key
+## Using .id_rsa key
 
-If you connect to an server which is already in your `~/.ssh/config` you can simply use: 
+If you connect to an server which is already in your `~/.ssh/config` you can simply use:
 
 ```json
 {
@@ -20,12 +20,20 @@ If you connect to an server which is already in your `~/.ssh/config` you can sim
 }
 ```
 
-> Help Welcome:
->
-> Parsing `~/.ssh/config` could make config much more easier. Feel free to add this functionality.
+## Using ssh-agent
 
+If you have to deal with multiple SSH connections you should use an key pair for every host you connect to. It is also a good idea to protect your keys with a passphrase. You should consider use a ssh-agent. To enable ssh-agent usage, activate it with agent = true parameter.
 
-## using another keyfile
+```json
+{
+  "host": "192.168.1.2",
+  "port": 22,
+  "username": "your-login",
+  "agent": true
+}
+```
+
+## Using another keyfile (consider using ssh-agent instead)
 
 If you specified an different ssh key than `.id_rsa` you can simply set it by:
 
@@ -37,9 +45,6 @@ If you specified an different ssh key than `.id_rsa` you can simply set it by:
   "privateKey": "/full/path/to/your/private/key"
 }
 ```
-## using a password protected keyfile
-
-Warning: `remote-logger.json` is unencrypted, everyone with read access to this file can read your passphrase! 
 
 If your key is password protected, set your passphrase via:
 
@@ -53,11 +58,9 @@ If your key is password protected, set your passphrase via:
 }
 ```
 
-> Help Welcome:
->
-> Ssh connection could make use of a running ssh-agent. Feel free to add this functionality.
+Warning: `remote-logger.json` is unencrypted, everyone with read access to this file can read your passphrase!
 
-## using a username + password connection
+## Using username + password connection (never ever do this in production!)
 
 Warning: `remote-logger.json` is unencrypted, everyone with read access to this file can read your passphrase!
 
@@ -70,7 +73,27 @@ Warning: `remote-logger.json` is unencrypted, everyone with read access to this 
 }
 ```
 
-# Example Requests
+## Maximum log entries displayed
+
+You can define, how many log entries are displayed. If you don't set this value, as default 100 is used.
+
+```json
+{
+  "maxLogEntries": 50,
+}
+```
+
+## Debug (development only)
+
+If you want to log the logger, you can enable debug mode with "debug": true. Be aware, windows will show strange behaviour if you enable logging.
+
+```json
+{
+  "debug": true,
+}
+```
+
+## Example Requests
 
 ```bash
 curl -X POST -H "Content-Type: application/json" -d '{"level": "debug", "message": "Hello Debug", "type": "text", "context": {"email": "hello@foobar.ninja"}}' http://localhost:29980

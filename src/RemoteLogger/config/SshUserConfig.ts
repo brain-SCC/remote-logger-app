@@ -9,6 +9,8 @@ export interface UserConfigInterface {
   password?: string
   privateKey?: string
   passphrase?: string
+  agent?: boolean
+  maxLogEntries?:number
   isDebugEnabled: boolean
 }
 
@@ -19,6 +21,8 @@ interface ReadConfig {
   password?: string
   privateKey?: string
   passphrase?: string
+  agent?:boolean
+  maxLogEntries?:number
   debug?: boolean
 }
 
@@ -30,7 +34,9 @@ export class UserConfig implements UserConfigInterface {
   password?: string
   privateKey?: string
   passphrase?: string
+  agent?:boolean
   isDebugEnabled: boolean
+  maxLogEntries?:number
 
   constructor() {
     this.remoteHost = "127.0.0.1"
@@ -43,21 +49,35 @@ export class UserConfig implements UserConfigInterface {
 
   private read(): void {
     const userConfFileValues: ReadConfig = this.readUserConfigFile()
-
     if (userConfFileValues.host) {
       this.remoteHost = userConfFileValues.host
     }
     if (userConfFileValues.port) {
-      this.remotePort =
-        typeof userConfFileValues.port !== "number"
-          ? parseInt(userConfFileValues.port)
-          : userConfFileValues.port
+      const remotePort = this.getIntegerConfigValue(userConfFileValues.port)
+      if(remotePort > 0 && remotePort <= 65535) {
+        this.remotePort = remotePort; 
+      }
     }
     if (userConfFileValues.username) {
       this.username = userConfFileValues.username
     }
     if (userConfFileValues.password) {
       this.password = userConfFileValues.password
+    }
+    if (userConfFileValues.privateKey) {
+      this.privateKey = userConfFileValues.privateKey
+    }
+    if (userConfFileValues.passphrase) {
+      this.passphrase = userConfFileValues.passphrase
+    }
+    if (userConfFileValues.agent) {
+      this.agent = userConfFileValues.agent
+    }
+    if (userConfFileValues.maxLogEntries) {
+      const maxLogEntries = this.getIntegerConfigValue(userConfFileValues.maxLogEntries)
+      if(maxLogEntries > 0 && maxLogEntries < Number.MAX_SAFE_INTEGER) {
+        this.maxLogEntries = maxLogEntries; 
+      }
     }
     if (userConfFileValues.debug) {
       this.isDebugEnabled = userConfFileValues.debug
@@ -71,6 +91,12 @@ export class UserConfig implements UserConfigInterface {
       userConf = JSON.parse(readFileSync(filepath, "utf8"))
     }
     return userConf;
+  }
+
+  private getIntegerConfigValue(value:string|number) {
+    return typeof value !== "number"
+              ? parseInt(value)
+              : value
   }
 
   private getUserConfigFile(): string {

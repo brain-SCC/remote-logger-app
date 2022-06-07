@@ -1,12 +1,13 @@
 import { readFileSync } from "fs";
 import path from "path";
-import { ConnectConfig } from "ssh2";
+import { ConnectConfig, BaseAgent } from "ssh2";
 import os from "os";
 
 export class SshConfig implements ConnectConfig {
-  password?: string;
-  privateKey?: Buffer | string;
-  passphrase?: string;
+  password?: string
+  privateKey?: Buffer | string
+  passphrase?: string
+  agent?: BaseAgent | string | undefined
 
   constructor(
     public readonly host: string,
@@ -26,5 +27,12 @@ export class SshConfig implements ConnectConfig {
     const fileContent = readFileSync(filepath);
     this.privateKey = Buffer.from(fileContent);
     this.passphrase = passphrase;
+  }
+
+  public getAgent(): string|undefined {
+    if(process.env.SSH_AUTH_SOCK) {
+      return process.env.SSH_AUTH_SOCK;
+    }
+    return undefined
   }
 }
