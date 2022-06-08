@@ -43,7 +43,7 @@ export class SshConfig implements ConnectConfig {
   }
 }
 
-class PrivateKeyLocator 
+export class PrivateKeyLocator 
 {
     private static readonly KEY_FILES = [ 
         "id_dsa",
@@ -58,14 +58,18 @@ class PrivateKeyLocator
     {
         const homedir = os.homedir();
         const sshdir = path.resolve(homedir, ".ssh")
+        return PrivateKeyLocator.locateIn(sshdir)
+    }
 
-        const existingFiles = PrivateKeyLocator.KEY_FILES
-            .map((file) => path.resolve(sshdir, file))
-            .filter((filepath) => existsSync(filepath))
+    public static locateIn(directory: string): string|undefined 
+    {
+      const existingFiles = PrivateKeyLocator.KEY_FILES
+        .map((file) => path.resolve(directory, file))
+        .filter((filepath) => existsSync(filepath))
 
-        if(existingFiles.length > 0) {
-            return existingFiles[0]
-        }
-        return undefined
+      if(existingFiles.length > 0) {
+          return existingFiles[0]
+      }
+      return undefined
     }
 }
