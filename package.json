@@ -62,7 +62,7 @@
   "dependencies": {
     "@types/ssh2": "^0.5.52",
     "fastify": "^4.0.2",
-    "sql-formatter": "^6.1.5",
+    "sql-formatter": "^7.0.2",
     "ssh2": "^1.11.0"
   },
   "config": {
