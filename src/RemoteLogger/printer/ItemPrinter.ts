@@ -1,6 +1,7 @@
 import { SqlPrettyPrint } from "./SqlPrettyPrint";
 import { StacktracePrettyPrint } from "./StacktracePrettyPrint";
 import { LogLevel, LogEntry } from "../types";
+import { ContextPrettyPrint } from "./ContextPrettyPrint";
 
 const logLevelCssClassNames: Record<LogLevel, string> = {
   debug: "border-secondary text-dark",
@@ -30,43 +31,39 @@ export class ItemPrinter {
     let sql = "";
 
     if (data.text) {
-      text = `<p>${data.text}</p>`;
+      text = `<p>${data.text}</p>`
     }
 
     if (data.stacktrace) {
-      stacktrace = `<p>Stacktrace:<br>${StacktracePrettyPrint.format(
-        data.stacktrace
-      )}</p>`;
+      stacktrace = `<p>Stacktrace:<br>${StacktracePrettyPrint.format(data.stacktrace)}</p>`
     }
 
     if (data.sql) {
       if(logLevel === "alert" || logLevel === "critical") {
-        sql = `<code class="text-white">${SqlPrettyPrint.format(data.sql)}</code>`;
+        sql = `<code class="text-white">${SqlPrettyPrint.format(data.sql)}</code>`
       }
       else {
-        sql = `<code>${SqlPrettyPrint.format(data.sql)}</code>`;
+        sql = `<code>${SqlPrettyPrint.format(data.sql)}</code>`
       }
     }
 
     if (data.context) {
-      context = `<p>Stacktrace:<br>${StacktracePrettyPrint.format(
-        data.context
-      )}</p>`;
+        context = `<p>Context:<br>${ContextPrettyPrint.format(data.context)}</p>`
     }
 
     let meta = "";
 
     if (data.file) {
-      meta += `File: ${data.file}`;
+      meta += `File: ${data.file}`
     }
     if (data.method) {
-      meta += ` Method: ${data.method}`;
+      meta += ` Method: ${data.method}`
     }
     if (data.line) {
-      meta += ` at line: ${data.line}`;
+      meta += ` at line: ${data.line}`
     }
 
-    meta += ` ${dateTime}`;
+    meta += ` ${dateTime}`
 
     div.classList.add(
       "shadow-sm", 
@@ -83,8 +80,8 @@ export class ItemPrinter {
       div.classList.add("d-none")
     }
 
-    const classNames = logLevelCssMap.get(logLevel) ?? logLevelCssMap.get("debug");
-    classNames?.split(" ").forEach(css => div.classList.add(css));
+    const classNames = logLevelCssMap.get(logLevel) ?? logLevelCssMap.get("debug")
+    classNames?.split(" ").forEach(css => div.classList.add(css))
 
     div.innerHTML = `
         <p>${message}</p>
@@ -92,6 +89,6 @@ export class ItemPrinter {
         <small class="text-muted">${meta}</small>
     `;
 
-    return div;
+    return div
   }
 }
