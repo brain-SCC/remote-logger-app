@@ -60,7 +60,7 @@
     "electron-squirrel-startup": "~1.0.0"
   },
   "dependencies": {
-    "@types/ssh2": "^1.11.0",
+    "@types/ssh2": "^1.11.11",
     "fastify": "^4.5.2",
     "sql-formatter": "^9.2.0",
     "ssh2": "^1.11.0"
