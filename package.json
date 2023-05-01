@@ -61,7 +61,7 @@
   },
   "dependencies": {
     "@types/ssh2": "^1.11.0",
-    "fastify": "^4.5.2",
+    "fastify": "^4.17.0",
     "sql-formatter": "^9.2.0",
     "ssh2": "^1.11.0"
   },
